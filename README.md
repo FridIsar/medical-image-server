@@ -27,6 +27,15 @@ This project involves creating a simple web server in Python to assess the minim
 3. The only branch provided in the repository is *main*. However, you are free to create and organize additional branches as necessary to complete your work.
 4. When you have completed the challenge, please send an email to the person who assigned you the coding challenge to let them know that you have finished and provide them with a link to your repository.
 
+### Running the project
+The project should be possible to run and test with docker-compose.  
+
+Run the project:  
+`docker-compose up --build`
+
+Test:  
+`docker-compose run --rm web-server python -m pytest`
+
 ### Technologies
 Some of our preferred/recommended technologies include:
 * Docker
