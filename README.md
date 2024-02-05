@@ -44,7 +44,7 @@ Some of our preferred/recommended technologies include:
 * pydicom
 * Svelte/SvelteKit
 
-## Evaluation the challenge: What we pay attention to
+## Evaluation of the challenge: What we pay attention to
 When evaluating the challenge, we pay attention to several factors to assess the candidate's skills and suitability for the role. Here are some of the key areas that we typically focus on:
 
 ### Functionality and completeness
