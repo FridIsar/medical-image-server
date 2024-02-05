@@ -12,7 +12,7 @@ This project involves creating a simple web server in Python to assess the minim
   
 3. **Display Patient Name**:
    * Upon pressing the first button, the web page, using JavaScript, connects back to the server.
-   * The server is expected to retrieve and provide the patient name stored in the DICOM file found in the attached ZIP file.
+   * The server is expected to retrieve and provide the patient name stored in the DICOM volume found in the data directory.
    * Once received, JavaScript will display the patient information.
 
 4. **Display Image**:
