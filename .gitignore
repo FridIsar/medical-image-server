@@ -1,2 +1,6 @@
 # ignore venv in backend folder
 backend/venv/
+
+#fastapi related files
+backend/app/__pycache__/
+*.pyc
