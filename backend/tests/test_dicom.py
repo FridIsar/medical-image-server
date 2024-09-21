@@ -27,6 +27,17 @@ def token():
     # Generate a valid token for the test user
     return create_access_token(data={"sub": "testuser"})
 
+def test_retrieve_middle_slice_success(token, test_db):
+    response = client.get(
+        "/middle-slice-image?dicom_filename=test/example.dcm",
+        headers={"Authorization": f"Bearer {token}"}
+    )
+    assert response.status_code == 200
+    assert "image" in response.json()
+    # Verify that the returned image is a 2D array of pixel values
+    assert isinstance(response.json()["image"], list)
+    assert isinstance(response.json()["image"][0], list)
+
 def test_retrieve_patient_name_success(token, test_db):
     response = client.get(
         "/patient-name?dicom_filename=test/example.dcm",
@@ -51,3 +62,4 @@ def test_invalid_dicom_file(token, test_db):
     )
     assert response.status_code == 500
     assert response.json()["detail"] == "Error reading DICOM file"
+
