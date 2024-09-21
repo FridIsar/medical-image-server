@@ -1,5 +1,6 @@
 from fastapi import FastAPI, Depends, HTTPException, status
 from sqlalchemy.orm import Session
+import logging
 from fastapi.security import OAuth2PasswordRequestForm
 from datetime import timedelta
 from . import auth, models, database, dicom_handler
@@ -33,4 +34,16 @@ def get_patient_name(dicom_filename: str, token: str = Depends(auth.get_current_
     except FileNotFoundError:
         raise HTTPException(status_code=404, detail="DICOM file not found")
     except Exception:
+        raise HTTPException(status_code=500, detail="Error reading DICOM file")
+    
+@app.get("/middle-slice-image")
+def get_middle_slice_image(dicom_filename: str, token: str = Depends(auth.get_current_user)):
+    try:
+        # Retrieve the middle slice image from the DICOM file
+        image = dicom_handler.get_middle_slice_image(dicom_filename)
+        return {"image": image}
+    except FileNotFoundError:
+        raise HTTPException(status_code=404, detail="DICOM file not found")
+    except Exception as e:
+        logging.error(f"Error reading DICOM file: {e}")
         raise HTTPException(status_code=500, detail="Error reading DICOM file")
