@@ -4,3 +4,6 @@ backend/venv/
 #fastapi related files
 backend/app/__pycache__/
 *.pyc
+
+#test related files
+backend/.coverage
