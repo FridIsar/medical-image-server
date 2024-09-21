@@ -9,4 +9,4 @@ backend/app/__pycache__/
 backend/.coverage
 
 #db
-backend/data.db
+data.db
