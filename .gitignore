@@ -1,4 +1,4 @@
-# ignore venv in backend folder
+#venv in backend folder
 backend/venv/
 
 #fastapi related files
@@ -7,3 +7,6 @@ backend/app/__pycache__/
 
 #test related files
 backend/.coverage
+
+#db
+backend/data.db
