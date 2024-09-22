@@ -26,6 +26,7 @@ pylibjpeg-libjpeg==2.2.0
 pylibjpeg-openjpeg==2.3.0
 pytest==8.3.3
 pytest-cov==5.0.0
+python-dotenv==1.0.1
 python-jose==3.3.0
 python-multipart==0.0.10
 rsa==4.9

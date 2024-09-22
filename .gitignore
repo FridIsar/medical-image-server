@@ -7,6 +7,11 @@ backend/app/__pycache__/
 
 #test related files
 backend/.coverage
+backend/tests/__pycache__/
+backend/.pytest_cache/
 
 #db
 data.db
+
+#security env
+backend/.env

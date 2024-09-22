@@ -1,11 +1,26 @@
 from fastapi import FastAPI, Depends, HTTPException, status
+from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 import logging
 from fastapi.security import OAuth2PasswordRequestForm
 from datetime import timedelta
+import os
+from dotenv import load_dotenv
 from . import auth, models, database, dicom_handler
 
+load_dotenv()
+
+allowed_origins = os.getenv("ALLOWED_ORIGINS", "http://localhost:5173")
+
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[allowed_origins],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get("/up")
 def read_root():
