@@ -21,19 +21,15 @@ test.describe('Dashboard Page', () => {
 
     // Check that the patient name is correct
     const patientName = await page.textContent('#patient-name');
-    expect(patientName).toBe('PatientName');
+    expect(patientName).toBe('Patient Name: PatientName');
   });
 
   test('should display middle slice image when button is clicked', async ({ page }) => {
     // Click the button to display the image
     await page.click('button:text("Display Image")');
 
-    // Wait for the image data to be displayed
-    await expect(page.locator('#image-data')).toBeVisible();
-
-    // Optionally, check that the image data is in the expected format
-    const imageData = await page.textContent('#image-data');
-    expect(imageData).toContain('['); // Simple check to see if it's an array
+    // Wait for the canvas to be visible
+    await expect(page.locator('canvas')).toBeVisible();
   });
 
   test('should log out successfully', async ({ page }) => {
