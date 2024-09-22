@@ -16,6 +16,8 @@
         });
   
         if (response.ok) {
+          const data = await response.json();
+          localStorage.setItem('token', data.access_token);
           // Redirect to the dashboard on successful login
           window.location.href = '/dashboard';
         } else {
