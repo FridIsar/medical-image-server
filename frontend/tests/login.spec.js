@@ -1,10 +1,13 @@
 import { test, expect } from '@playwright/test';
 
+const url = process.env.VITE_BASE_URL || 'http://localhost:5173';
+
+
 test.describe('Login Page', () => {
-  
+
   // Test to check that the login form displays correctly
   test('should display login form', async ({ page }) => {
-    await page.goto('/login');
+    await page.goto(url + '/login', { waitUntil: 'networkidle' });
     await expect(page.locator('input[placeholder="Username"]')).toBeVisible();
     await expect(page.locator('input[placeholder="Password"]')).toBeVisible();
     await expect(page.locator('button[type="submit"]')).toBeVisible();
@@ -12,18 +15,16 @@ test.describe('Login Page', () => {
 
   // Test for successful login and redirect to the dashboard
   test('should successfully log in with correct credentials', async ({ page }) => {
-    await page.goto('/login');
-    await page.fill('input[placeholder="Username"]', 'testuser');
-    await page.fill('input[placeholder="Password"]', 'testpass');
+    await page.goto(url + '/login', { waitUntil: 'networkidle' });
+    await page.fill('input[placeholder="Username"]', 'user');
+    await page.fill('input[placeholder="Password"]', 'password');
     await page.click('button[type="submit"]');
-    
-    // After successful login, we expect a redirect to /dashboard
-    await expect(page).toHaveURL('/dashboard');
+    await expect(page).toHaveURL(url+'/dashboard');
   });
 
   // Test for failed login attempt
   test('should show error with incorrect credentials', async ({ page }) => {
-    await page.goto('/login');
+    await page.goto(url + '/login', { waitUntil: 'networkidle' });
     await page.fill('input[placeholder="Username"]', 'wronguser');
     await page.fill('input[placeholder="Password"]', 'wrongpass');
     await page.click('button[type="submit"]');
