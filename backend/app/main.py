@@ -4,15 +4,44 @@ from sqlalchemy.orm import Session
 import logging
 from fastapi.security import OAuth2PasswordRequestForm
 from datetime import timedelta
-import os
-from dotenv import load_dotenv
 from . import auth, models, database, dicom_handler
+from dotenv import load_dotenv
+import os
+from contextlib import asynccontextmanager
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 load_dotenv()
 
 allowed_origins = os.getenv("ALLOWED_ORIGINS", "http://localhost:5173")
 
-app = FastAPI()
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Create the database schema
+    models.Base.metadata.create_all(bind=database.engine)
+    
+    # Startup event
+    db = database.SessionLocal()
+    username = "user"
+    password = "password"
+    
+    # Check if the user already exists
+    user = db.query(models.User).filter(models.User.username == username).first()
+    if not user:
+        # Create a new user
+        hashed_password = auth.get_password_hash(password)
+        new_user = models.User(username=username, hashed_password=hashed_password)
+        db.add(new_user)
+        db.commit()
+        logging.info(f"Created default user: {username}")
+    else:
+        logging.info(f"User '{username}' already exists")
+    db.close()
+    yield
+
+app = FastAPI(lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
@@ -33,8 +62,9 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depend
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Incorrect username or password",
+            headers={"WWW-Authenticate": "Bearer"},
         )
-    access_token_expires = timedelta(minutes=auth.ACCESS_TOKEN_EXPIRE_MINUTES)
+    access_token_expires = timedelta(minutes=30)
     access_token = auth.create_access_token(
         data={"sub": user.username}, expires_delta=access_token_expires
     )
