@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000
+    volumes:
+      - ./backend:/app
+    ports:
+      - "8000:8000"
+
+  backend_tests:
+    build:
+      context: ./backend
+    command: pytest --cov=app
+    volumes:
+      - ./backend:/app
+
+  frontend:
+    build:
+      context: ./frontend
+    command: sh -c "npm install && npm run dev -- --host 0.0.0.0 --port 5173"
+    volumes:
+      - ./frontend:/app
+    ports:
+      - "5173:5173"
+    environment:
+        - VITE_BASE_URL=${VITE_BASE_URL}
+        - VITE_API_URL=${VITE_API_URL}
+
+  frontend_tests:
+      build:
+        context: ./frontend
+
+      command: sh -c "wait-on http://frontend:5173 && npx playwright test"
+      volumes:
+        - ./frontend:/app
+      environment:
+        - VITE_BASE_URL=${VITE_BASE_URL}
+        - VITE_API_URL=${VITE_API_URL}
+      depends_on:
+        - frontend
+        - backend
